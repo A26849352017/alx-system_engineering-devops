@@ -3,6 +3,8 @@
 #   Only displays the part of the name after the first dash. 
 
 list=$(ls)
-for i in $list; do
+for i in $list
+# for files in *
+do
   echo "$i" | cut -d '-' -f2
 done

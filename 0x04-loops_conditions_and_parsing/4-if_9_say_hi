@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
-#while if stuff
+# Display say hi at 9th 'Best School' output
 
-count=0
-while [ $count -ne 11 ]
+i=0
+
+while [ $i -lt 10 ]
 do
-    if [ $count -eq 9 ]; then
-	echo "Hi"
-    else
-	echo "Best School"
-    fi
-    ((count++))
+  if [ $i -eq 9 ]
+  then
+    echo "Hi"
+  fi
+  echo "Best School"
+  (( i++ ))
 done
