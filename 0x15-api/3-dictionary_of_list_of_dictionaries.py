@@ -1,18 +1,32 @@
 #!/usr/bin/python3
-"""Exports to-do list information of all employees to JSON format."""
+"""
+    A python script that, using a REST API,
+    returns information about all employeer TODO
+    list progress and exports it in CSV format in
+    json file.
+"""
+
+
 import json
 import requests
+from sys import argv
+
 
 if __name__ == "__main__":
-    url = "https://jsonplaceholder.typicode.com/"
-    users = requests.get(url + "users").json()
+    emps = requests.get("https://jsonplaceholder.typicode.com/users").json()
 
-    with open("todo_all_employees.json", "w") as jsonfile:
-        json.dump({
-            u.get("id"): [{
-                "task": t.get("title"),
-                "completed": t.get("completed"),
-                "username": u.get("username")
-            } for t in requests.get(url + "todos",
-                                    params={"userId": u.get("id")}).json()]
-            for u in users}, jsonfile)
+    employees = {}
+    for emp in emps:
+        empId = emp['id']
+        employees.update({empId: []})
+        task_url = "https://jsonplaceholder.typicode.com/users/{}/todos".\
+                   format(empId)
+        tasks = requests.get(task_url).json()
+
+        for task in tasks:
+            employees[empId].append({'username': emp['username'],
+                                     'task': task['title'],
+                                     'completed': task['completed']})
+
+    with open('todo_all_employees.json', 'w') as f:
+        json.dump(employees, f)
